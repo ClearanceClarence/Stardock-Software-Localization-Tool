@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace Stardock_Software_Localization_Tool
 {
@@ -40,8 +42,23 @@ namespace Stardock_Software_Localization_Tool
                 AllowUserToAddRows = false,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
-            dataGridView.Columns.Add("originalText", "Original Text");
-            dataGridView.Columns.Add("translatedText", "Translated Text");
+            
+            // Create and add the original text column
+            var originalTextColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "originalText",
+                HeaderText = "Original Text",
+                ReadOnly = true
+            };
+            dataGridView.Columns.Add(originalTextColumn);
+            
+            var translatedTextColumn = new DataGridViewTextBoxColumn
+            {
+                Name = "translatedText",
+                HeaderText = "Translated Text"
+            };
+            dataGridView.Columns.Add(translatedTextColumn);
+            
             toolTip.SetToolTip(dataGridView, "Double-click a cell to edit");
 
             btnLoadFile = new Button { Text = "Load File", Size = new Size(100, 30) };
@@ -65,7 +82,7 @@ namespace Stardock_Software_Localization_Tool
                 Filter = "Language files (*.lng)|*.lng"
             };
 
-            FlowLayoutPanel bottomPanel = new FlowLayoutPanel
+            var bottomPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Bottom,
                 FlowDirection = FlowDirection.LeftToRight,
@@ -110,7 +127,7 @@ namespace Stardock_Software_Localization_Tool
             cboTargetSoftware = new ComboBox { Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
             PopulateTargetSoftwareComboBox();
 
-            TableLayoutPanel topPanel = new TableLayoutPanel
+            var topPanel = new TableLayoutPanel
             {
                 ColumnCount = 4,
                 RowCount = 2,
@@ -136,15 +153,32 @@ namespace Stardock_Software_Localization_Tool
         
         private void PopulateTargetSoftwareComboBox()
         {
-            cboTargetSoftware.Items.AddRange(new object[] { "Software 1", "Software 2", "Software 3" });
-            cboTargetSoftware.SelectedIndex = 0; // Set the default selected item
+            try
+            {
+                string filePath = Path.Combine(Application.StartupPath, "Resources", "Assets", "Files", "software.json");
+                string jsonData = File.ReadAllText(filePath);
+                List<string>? softwareList = JsonConvert.DeserializeObject<List<string>>(jsonData);
+
+                cboTargetSoftware.Items.Clear();
+                foreach (string software in softwareList)
+                {
+                    cboTargetSoftware.Items.Add(software);
+                }
+
+                if (cboTargetSoftware.Items.Count > 0)
+                    cboTargetSoftware.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading software list: {ex.Message}");
+            }
         }
 
 
         private void ApplyAdvancedTheming()
         {
-            Color backgroundColor = Color.WhiteSmoke;
-            Color primaryColor = Color.FromArgb(211, 211, 211); // Light gray
+            var backgroundColor = Color.WhiteSmoke;
+            var primaryColor = Color.FromArgb(211, 211, 211); // Light gray
 
             BackColor = backgroundColor;
             Font = new Font("Segoe UI", 9);
@@ -220,11 +254,19 @@ namespace Stardock_Software_Localization_Tool
                 var parts = line.Split(new[] { '=' }, 2);
                 if (parts.Length == 2)
                 {
-                    int rowIndex = dataGridView.Rows.Add(parts[0], parts[1]);
-                    UpdateRowColor(rowIndex, parts[0], parts[1]);
+                    var originalText = RemoveQuotationMarks(parts[0]);
+                    var translatedText = RemoveQuotationMarks(parts[1]);
+
+                    var rowIndex = dataGridView.Rows.Add(originalText, translatedText);
+                    UpdateRowColor(rowIndex, originalText, translatedText);
                 }
             }
             UpdateTranslationProgress();
+        }
+        
+        private string RemoveQuotationMarks(string input)
+        {
+            return input.Trim('"');
         }
 
         private void BtnSaveFile_Click(object? sender, EventArgs e)
@@ -253,17 +295,25 @@ namespace Stardock_Software_Localization_Tool
             {
                 if (row.Cells[0].Value != null && row.Cells[1].Value != null)
                 {
-                    lines.Add(row.Cells[0].Value + "=" + row.Cells[1].Value);
+                    var originalText = AddQuotationMarks(row.Cells[0].Value.ToString());
+                    var translatedText = AddQuotationMarks(row.Cells[1].Value.ToString());
+
+                    lines.Add($"{originalText}={translatedText}");
                 }
             }
             File.WriteAllLines(filePath, lines);
             statusLabel.Text = "File saved successfully.";
         }
 
+        private string AddQuotationMarks(string? input)
+        {
+            return $"\"{input}\"";
+        }
+
         private void UpdateTranslationProgress()
         {
-            int totalStrings = dataGridView.Rows.Count;
-            int translatedStrings = dataGridView.Rows.Cast<DataGridViewRow>()
+            var totalStrings = dataGridView.Rows.Count;
+            var translatedStrings = dataGridView.Rows.Cast<DataGridViewRow>()
                 .Count(row => row.Cells[0].Value?.ToString() != row.Cells[1].Value?.ToString());
 
             lblTranslationProgress.Text = $"{translatedStrings} of {totalStrings} strings translated " +
@@ -273,7 +323,7 @@ namespace Stardock_Software_Localization_Tool
 
         private void UpdateRowColor(int rowIndex, string original, string translated)
         {
-            Color textColor = original == translated ? Color.Red : Color.Green;
+            var textColor = original == translated ? Color.Red : Color.Green;
             dataGridView.Rows[rowIndex].Cells[1].Style.ForeColor = textColor;
         }
         
