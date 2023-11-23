@@ -25,6 +25,22 @@ namespace Stardock_Software_Localization_Tool
             InitializeTranslatorInfoFields();
             ApplyAdvancedTheming();
             Icon = new Icon(Path.Combine(Application.StartupPath, "Resources", "Assets", "Images", "icon.ico"));
+            
+            dataGridView!.CellValueChanged += DataGridView_CellValueChanged;
+        }
+        
+        private void DataGridView_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
+        {
+            // Update the row color for the changed cell
+            if (e.ColumnIndex == dataGridView.Columns["translatedText"]!.Index)
+            {
+                var originalText = dataGridView.Rows[e.RowIndex].Cells["originalText"].Value?.ToString();
+                var translatedText = dataGridView.Rows[e.RowIndex].Cells["translatedText"].Value?.ToString();
+                UpdateRowColor(e.RowIndex, originalText!, translatedText!);
+            }
+
+            // Update the translation progress
+            UpdateTranslationProgress();
         }
 
         private void InitializeCustomComponents()
@@ -43,7 +59,6 @@ namespace Stardock_Software_Localization_Tool
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
             
-            // Create and add the original text column
             var originalTextColumn = new DataGridViewTextBoxColumn
             {
                 Name = "originalText",
@@ -71,8 +86,9 @@ namespace Stardock_Software_Localization_Tool
 
             lblTranslationProgress = new Label
             {
-                Text = "Translation Progress",
-                Size = new Size(200, 30)
+                Text = "Translation Progress: ",
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
             openFileDialog = new OpenFileDialog();
@@ -88,6 +104,11 @@ namespace Stardock_Software_Localization_Tool
                 FlowDirection = FlowDirection.LeftToRight,
                 Height = 50
             };
+            
+            // Adjust the Margin to center the label vertically
+            var verticalMargin = CalculateVerticalMargin(bottomPanel.Height, lblTranslationProgress.Height);
+            lblTranslationProgress.Margin = new Padding(3, verticalMargin, 3, verticalMargin);
+            
             bottomPanel.Controls.Add(btnLoadFile);
             bottomPanel.Controls.Add(btnSaveFile);
             bottomPanel.Controls.Add(lblTranslationProgress);
@@ -114,16 +135,36 @@ namespace Stardock_Software_Localization_Tool
 
         private void InitializeTranslatorInfoFields()
         {
-            lblTranslatorName = new Label { Text = "Translator Name:", AutoSize = true };
+            lblTranslatorName = new Label { 
+                Text = "Translator Name:",
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill 
+            };
             txtTranslatorName = new TextBox { Width = 200 };
 
-            lblTranslatorEmail = new Label { Text = "Translator Email:", AutoSize = true };
+            lblTranslatorEmail = new Label { 
+                Text = "Translator Email:",                
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill 
+            };
             txtTranslatorEmail = new TextBox { Width = 200 };
 
-            lblTranslatorGitHub = new Label { Text = "Translator GitHub:", AutoSize = true };
+            lblTranslatorGitHub = new Label { 
+                Text = "Translator GitHub:",               
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill 
+            };
             txtTranslatorGitHub = new TextBox { Width = 200 };
 
-            lblTargetSoftware = new Label { Text = "Target Software:", AutoSize = true };
+            lblTargetSoftware = new Label { 
+                Text = "Target Software:",                
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill 
+            };
             cboTargetSoftware = new ComboBox { Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
             PopulateTargetSoftwareComboBox();
 
@@ -155,12 +196,12 @@ namespace Stardock_Software_Localization_Tool
         {
             try
             {
-                string filePath = Path.Combine(Application.StartupPath, "Resources", "Assets", "Files", "software.json");
-                string jsonData = File.ReadAllText(filePath);
-                List<string>? softwareList = JsonConvert.DeserializeObject<List<string>>(jsonData);
+                var filePath = Path.Combine(Application.StartupPath, "Resources", "Assets", "Files", "software.json");
+                var jsonData = File.ReadAllText(filePath);
+                var softwareList = JsonConvert.DeserializeObject<List<string>>(jsonData);
 
                 cboTargetSoftware.Items.Clear();
-                foreach (string software in softwareList)
+                foreach (var software in softwareList!)
                 {
                     cboTargetSoftware.Items.Add(software);
                 }
@@ -343,6 +384,12 @@ namespace Stardock_Software_Localization_Tool
             txtTranslatorEmail.Clear();
             txtTranslatorGitHub.Clear();
             cboTargetSoftware.SelectedIndex = -1;
+        }
+        
+        private int CalculateVerticalMargin(int containerHeight, int controlHeight)
+        {
+            int margin = (containerHeight - controlHeight) / 2;
+            return Math.Max(margin, 0); // Ensure the margin is not negative
         }
         
     }
