@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Newtonsoft.Json;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -25,10 +26,10 @@ namespace Stardock_Software_Localization_Tool
             InitializeTranslatorInfoFields();
             ApplyAdvancedTheming();
             Icon = new Icon(Path.Combine(Application.StartupPath, "Resources", "Assets", "Images", "icon.ico"));
-            
+
             dataGridView!.CellValueChanged += DataGridView_CellValueChanged;
         }
-        
+
         private void DataGridView_CellValueChanged(object? sender, DataGridViewCellEventArgs e)
         {
             // Update the row color for the changed cell
@@ -58,7 +59,7 @@ namespace Stardock_Software_Localization_Tool
                 AllowUserToAddRows = false,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
-            
+
             var originalTextColumn = new DataGridViewTextBoxColumn
             {
                 Name = "originalText",
@@ -66,16 +67,17 @@ namespace Stardock_Software_Localization_Tool
                 ReadOnly = true
             };
             dataGridView.Columns.Add(originalTextColumn);
-            
+
             var translatedTextColumn = new DataGridViewTextBoxColumn
             {
                 Name = "translatedText",
                 HeaderText = "Translated Text"
             };
             dataGridView.Columns.Add(translatedTextColumn);
-            
+
             toolTip.SetToolTip(dataGridView, "Double-click a cell to edit");
 
+            // Buttons
             btnLoadFile = new Button { Text = "Load File", Size = new Size(100, 30) };
             btnLoadFile.Click += BtnLoadFile_Click;
             toolTip.SetToolTip(btnLoadFile, "Load a .lng file");
@@ -84,86 +86,94 @@ namespace Stardock_Software_Localization_Tool
             btnSaveFile.Click += BtnSaveFile_Click;
             toolTip.SetToolTip(btnSaveFile, "Save the .lng file");
 
+            Button btnExportToXml = new Button { Text = "Export to XML", Size = new Size(120, 30) };
+            btnExportToXml.Click += BtnExportToXml_Click; // Ensure this event handler is implemented
+
+            Button btnImportFromXml = new Button { Text = "Import from XML", Size = new Size(120, 30) };
+            btnImportFromXml.Click += BtnImportFromXml_Click; // Ensure this event handler is implemented
+
+            // Button panel
+            var buttonPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                FlowDirection = FlowDirection.LeftToRight,
+                Height = 40,
+                Padding = new Padding(0, 5, 0, 0)
+            };
+
+            buttonPanel.Controls.Add(btnLoadFile);
+            buttonPanel.Controls.Add(btnSaveFile);
+            buttonPanel.Controls.Add(btnExportToXml);
+            buttonPanel.Controls.Add(btnImportFromXml);
+
             lblTranslationProgress = new Label
             {
                 Text = "Translation Progress: ",
                 AutoSize = true,
-                TextAlign = ContentAlignment.MiddleLeft
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Bottom
             };
 
-            openFileDialog = new OpenFileDialog();
+            openFileDialog = new OpenFileDialog
+            {
+                Filter = "Language files (*.lng)|*.lng|All files (*.*)|*.*"
+            };
+
             saveFileDialog = new SaveFileDialog
             {
                 DefaultExt = "lng",
                 Filter = "Language files (*.lng)|*.lng"
             };
 
-            var bottomPanel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Bottom,
-                FlowDirection = FlowDirection.LeftToRight,
-                Height = 50
-            };
-            
-            // Adjust the Margin to center the label vertically
-            var verticalMargin = CalculateVerticalMargin(bottomPanel.Height, lblTranslationProgress.Height);
-            lblTranslationProgress.Margin = new Padding(3, verticalMargin, 3, verticalMargin);
-            
-            bottomPanel.Controls.Add(btnLoadFile);
-            bottomPanel.Controls.Add(btnSaveFile);
-            bottomPanel.Controls.Add(lblTranslationProgress);
-
-            Controls.Add(dataGridView);
-            Controls.Add(bottomPanel);
-
             progressBar = new ProgressBar
             {
                 Dock = DockStyle.Bottom,
                 Height = 20
             };
+
+            // Add controls to the form
+            Controls.Add(dataGridView);
+            Controls.Add(buttonPanel);
+            Controls.Add(lblTranslationProgress);
             Controls.Add(progressBar);
-            
-            btnLoadFile = new Button { Text = "Load File", Size = new Size(100, 30) };
-            btnLoadFile.Click += BtnLoadFile_Click;
-            StyleButton(btnLoadFile, Color.FromArgb(30, 144, 255), Color.FromArgb(65, 105, 225)); // DodgerBlue, RoyalBlue
-
-            btnSaveFile = new Button { Text = "Save File", Size = new Size(100, 30) };
-            btnSaveFile.Click += BtnSaveFile_Click;
-            StyleButton(btnSaveFile, Color.FromArgb(50, 205, 50), Color.FromArgb(60, 179, 113)); // LimeGreen, MediumSeaGreen
+            Controls.Add(statusStrip);
         }
-
 
         private void InitializeTranslatorInfoFields()
         {
-            lblTranslatorName = new Label { 
+            lblTranslatorName = new Label
+            {
                 Text = "Translator Name:",
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill 
+                Dock = DockStyle.Fill
             };
             txtTranslatorName = new TextBox { Width = 200 };
 
-            lblTranslatorEmail = new Label { 
-                Text = "Translator Email:",                
+            lblTranslatorEmail = new Label
+            {
+                Text = "Translator Email:",
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill 
+                Dock = DockStyle.Fill
             };
             txtTranslatorEmail = new TextBox { Width = 200 };
 
-            lblTranslatorGitHub = new Label { 
-                Text = "Translator GitHub:",               
+            lblTranslatorGitHub = new Label
+            {
+                Text = "Translator GitHub:",
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill 
+                Dock = DockStyle.Fill
             };
             txtTranslatorGitHub = new TextBox { Width = 200 };
 
-            lblTargetSoftware = new Label { 
-                Text = "Target Software:",                
+            lblTargetSoftware = new Label
+            {
+                Text = "Target Software:",
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill 
+                Dock = DockStyle.Fill
             };
             cboTargetSoftware = new ComboBox { Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
             PopulateTargetSoftwareComboBox();
@@ -191,7 +201,7 @@ namespace Stardock_Software_Localization_Tool
 
             Controls.Add(topPanel);
         }
-        
+
         private void PopulateTargetSoftwareComboBox()
         {
             try
@@ -237,22 +247,6 @@ namespace Stardock_Software_Localization_Tool
             statusLabel.Font = new Font("Segoe UI", 9);
         }
 
-        private void StyleButton(Button button, Color backgroundColor, Color hoverColor)
-        {
-            // Base styling
-            button.BackColor = backgroundColor;
-            button.ForeColor = Color.White;
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            button.Cursor = Cursors.Hand;
-
-            // Hover effects
-            button.MouseEnter += (_, _) => button.BackColor = hoverColor;
-            button.MouseLeave += (_, _) => button.BackColor = backgroundColor;
-        }
-
-
 
         private void BtnLoadFile_Click(object? sender, EventArgs e)
         {
@@ -263,8 +257,7 @@ namespace Stardock_Software_Localization_Tool
                 statusLabel.Text = "File loaded: " + openFileDialog.FileName;
             }
         }
-
-
+        
         private void LoadLanguageFile(string filePath)
         {
             var lines = File.ReadAllLines(filePath);
@@ -273,19 +266,22 @@ namespace Stardock_Software_Localization_Tool
 
             foreach (var line in lines)
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
+                // Skip empty lines, lines with specific empty key-value pairs, or comment lines
+                if (string.IsNullOrWhiteSpace(line) 
+                    || line.Trim().Equals("\"  \"=\"  \"") 
+                    || line.Trim().Equals("\" \"=\" \"")
+                    || line.StartsWith(";"))
+                    continue;
 
                 if (line.StartsWith("#"))
                 {
+                    // Handle comment lines
                     if (line.Contains("Translator Name:"))
                         txtTranslatorName.Text = ExtractCommentData(line);
-
                     else if (line.Contains("Translator Email:"))
                         txtTranslatorEmail.Text = ExtractCommentData(line);
-
                     else if (line.Contains("Translator GitHub:"))
                         txtTranslatorGitHub.Text = ExtractCommentData(line);
-
                     else if (line.Contains("Target Software:"))
                         SelectComboBoxItemByText(cboTargetSoftware, ExtractCommentData(line));
 
@@ -298,13 +294,18 @@ namespace Stardock_Software_Localization_Tool
                     var originalText = RemoveQuotationMarks(parts[0]);
                     var translatedText = RemoveQuotationMarks(parts[1]);
 
-                    var rowIndex = dataGridView.Rows.Add(originalText, translatedText);
-                    UpdateRowColor(rowIndex, originalText, translatedText);
+                    // Check if both original and translated text are not empty
+                    if (!string.IsNullOrWhiteSpace(originalText) && !string.IsNullOrWhiteSpace(translatedText))
+                    {
+                        var rowIndex = dataGridView.Rows.Add(originalText, translatedText);
+                        UpdateRowColor(rowIndex, originalText, translatedText);
+                    }
                 }
             }
             UpdateTranslationProgress();
         }
-        
+
+
         private string RemoveQuotationMarks(string input)
         {
             return input.Trim('"');
@@ -342,6 +343,7 @@ namespace Stardock_Software_Localization_Tool
                     lines.Add($"{originalText}={translatedText}");
                 }
             }
+
             File.WriteAllLines(filePath, lines);
             statusLabel.Text = "File saved successfully.";
         }
@@ -367,7 +369,7 @@ namespace Stardock_Software_Localization_Tool
             var textColor = original == translated ? Color.Red : Color.Green;
             dataGridView.Rows[rowIndex].Cells[1].Style.ForeColor = textColor;
         }
-        
+
         private string ExtractCommentData(string line)
         {
             return line.Substring(line.IndexOf(':') + 1).Trim();
@@ -385,12 +387,84 @@ namespace Stardock_Software_Localization_Tool
             txtTranslatorGitHub.Clear();
             cboTargetSoftware.SelectedIndex = -1;
         }
-        
-        private int CalculateVerticalMargin(int containerHeight, int controlHeight)
+
+        private void ExportToXml(string filePath)
         {
-            int margin = (containerHeight - controlHeight) / 2;
-            return Math.Max(margin, 0); // Ensure the margin is not negative
+            var xDocument = new XDocument();
+            var root = new XElement("Translations");
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells[0].Value == null || row.Cells[1].Value == null)
+                    continue;
+
+                var originalText = row.Cells[0].Value.ToString();
+                var translatedText = row.Cells[1].Value.ToString();
+
+                var translationElement = new XElement("Translation",
+                    new XElement("Original", originalText),
+                    new XElement("Translated", translatedText));
+
+                root.Add(translationElement);
+            }
+
+            xDocument.Add(root);
+            xDocument.Save(filePath);
         }
-        
+
+        private void ImportFromXml(string filePath)
+        {
+            var xDocument = XDocument.Load(filePath);
+            var translations = xDocument.Descendants("Translation");
+
+            dataGridView.Rows.Clear();
+
+            foreach (var translation in translations)
+            {
+                var originalText = translation.Element("Original")?.Value.Trim();
+                var translatedText = translation.Element("Translated")?.Value.Trim();
+
+                // Skip empty translations or trivial key-value pairs
+                if (string.IsNullOrWhiteSpace(originalText) 
+                    || string.IsNullOrWhiteSpace(translatedText) 
+                    || (originalText == " " && translatedText == " ")
+                    || (originalText == "  " && translatedText == "  "))
+                    continue;
+
+                dataGridView.Rows.Add(originalText, translatedText);
+            }
+
+            UpdateTranslationProgress();
+        }
+
+
+        private void BtnExportToXml_Click(object? sender, EventArgs e)
+        {
+            SaveFileDialog saveXmlDialog = new SaveFileDialog
+            {
+                Filter = "XML files (*.xml)|*.xml",
+                DefaultExt = "xml",
+                AddExtension = true
+            };
+
+            if (saveXmlDialog.ShowDialog() == DialogResult.OK)
+            {
+                ExportToXml(saveXmlDialog.FileName);
+            }
+        }
+
+        private void BtnImportFromXml_Click(object? sender, EventArgs e)
+        {
+            OpenFileDialog openXmlDialog = new OpenFileDialog
+            {
+                Filter = "XML files (*.xml)|*.xml",
+                DefaultExt = "xml"
+            };
+
+            if (openXmlDialog.ShowDialog() == DialogResult.OK)
+            {
+                ImportFromXml(openXmlDialog.FileName);
+            }
+        }
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace Stardock_Software_Localization_Tool;
+﻿using System.ComponentModel;
+
+namespace Stardock_Software_Localization_Tool;
 
 partial class LanguageEditorForm
 {
     /// <summary>
     ///  Required designer variable.
     /// </summary>
-    private System.ComponentModel.IContainer components = null;
+    private IContainer components = null;
 
     /// <summary>
     ///  Clean up any resources being used.
