@@ -1,0 +1,19 @@
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Resources\Assets\Files\software.json
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Resources\Assets\Images\icon.ico
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Stardock Software Localization Tool.exe
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Stardock Software Localization Tool.deps.json
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Stardock Software Localization Tool.runtimeconfig.json
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Stardock Software Localization Tool.dll
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Stardock Software Localization Tool.pdb
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.csproj.AssemblyReference.cache
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.AssemblyInfoInputs.cache
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.AssemblyInfo.cs
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.csproj.CoreCompileInputs.cache
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.csproj.CopyComplete
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.dll
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\refint\Stardock Software Localization Tool.dll
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.pdb
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\Stardock Software Localization Tool.genruntimeconfig.cache
+C:\Users\Adrian\RiderProjects\Stardock-Software-Localization-Tool\obj\Debug\net6.0-windows\ref\Stardock Software Localization Tool.dll

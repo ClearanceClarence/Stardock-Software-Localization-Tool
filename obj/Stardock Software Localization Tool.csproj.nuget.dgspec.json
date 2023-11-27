@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\Stardock Software Localization Tool.csproj": {}
+    "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\Stardock Software Localization Tool.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\Stardock Software Localization Tool.csproj": {
+    "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\Stardock Software Localization Tool.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\Stardock Software Localization Tool.csproj",
+        "projectUniqueName": "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\Stardock Software Localization Tool.csproj",
         "projectName": "Stardock Software Localization Tool",
-        "projectPath": "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\Stardock Software Localization Tool.csproj",
-        "packagesPath": "C:\\Users\\adria\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\obj\\",
+        "projectPath": "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\Stardock Software Localization Tool.csproj",
+        "packagesPath": "C:\\Users\\Adrian\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\adria\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Adrian\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0-windows"
@@ -62,7 +62,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\adria\\.dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Adrian\\.dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "49DmLpRoAzSGTxASUZCRxtRq/Aa0qxOlucqkeG17f2qBfHeiNSA8iFcofA8oVFUJ5Df0PfYdSDyLMWgqqQFMcA==",
+  "dgSpecHash": "ujpg+Mb2CJPdI/Eqk0rcUj5RzmSB5g60lXDDHiyBXZ6Z+ABjbAIq8kTDXQjMtVSUnbxOkcgoU6IdcJy+TrC3ig==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adria\\RiderProjects\\Stardock Software Localization Tool\\Stardock Software Localization Tool\\Stardock Software Localization Tool.csproj",
+  "projectFilePath": "C:\\Users\\Adrian\\RiderProjects\\Stardock-Software-Localization-Tool\\Stardock Software Localization Tool.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\adria\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\Adrian\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }
